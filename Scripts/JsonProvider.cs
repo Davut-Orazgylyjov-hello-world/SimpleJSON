@@ -1,75 +1,78 @@
 using System;
 using System.IO;
-using SimpleJSON;
 using UnityEngine;
 
-public class JsonProvider
+namespace OrazgylyjovFuteres.SimpleJSON
 {
-    public JSONNode JsonNode { get; private set; }
-    private string _path;
-
-    public JsonProvider(string pathToFile, string fileName)
+    public class JsonProvider
     {
-        fileName = ConvertFileNameToJsonFormat(fileName);
-        _path = Path.Combine(pathToFile, fileName);
-        
-        if (IsValidPath(pathToFile) && IsFileExistsCorrect(_path))
-            ReadJsonFile();;
-    }
+        public JSONNode JsonNode { get; private set; }
+        private string _path;
 
-    private string ConvertFileNameToJsonFormat(string fileName)
-    {
-        if (!fileName.EndsWith(".json"))
-            return fileName + ".json";
-        return fileName;
-    }
-
-
-    private static bool IsFileExistsCorrect(string path)
-    {
-        if(File.Exists(path))
-            return true;
-
-        Debug.LogError($"File path is incorrect: {path}");
-        return false;
-    }
-
-    private bool IsValidPath(string path, bool allowRelativePaths = false)
-    {
-        bool isValid = true;
-
-        try
+        public JsonProvider(string pathToFile, string fileName)
         {
-            string fullPath = Path.GetFullPath(path);
+            fileName = ConvertFileNameToJsonFormat(fileName);
+            _path = Path.Combine(pathToFile, fileName);
 
-            if (allowRelativePaths)
-            {
-                isValid = Path.IsPathRooted(path);
-            }
-            else
-            {
-                string root = Path.GetPathRoot(path);
-                isValid = string.IsNullOrEmpty(root.Trim(new char[] {'\\', '/'})) == false;
-            }
+            if (IsValidPath(pathToFile) && IsFileExistsCorrect(_path))
+                ReadJsonFile();
+            ;
         }
-        catch (Exception exception)
+
+        private string ConvertFileNameToJsonFormat(string fileName)
         {
-            Debug.LogError($"ERROR VALID PATH: {path} \t {exception}");
+            if (!fileName.EndsWith(".json"))
+                return fileName + ".json";
+            return fileName;
+        }
+
+
+        private static bool IsFileExistsCorrect(string path)
+        {
+            if (File.Exists(path))
+                return true;
+
+            Debug.LogError($"File path is incorrect: {path}");
             return false;
         }
 
-        return true;
-    }
+        private bool IsValidPath(string path, bool allowRelativePaths = false)
+        {
+            bool isValid = true;
 
-    public void ReadJsonFile()
-    {
-        string jsonStr = File.ReadAllText(_path);
-        JsonNode = JSONNode.Parse(jsonStr);
-    }
+            try
+            {
+                string fullPath = Path.GetFullPath(path);
 
-    public void WriteJsonFile(string jsonData)
-    {
-        Debug.Log("Сохранить файл");
-        File.WriteAllText(_path, jsonData);
+                if (allowRelativePaths)
+                {
+                    isValid = Path.IsPathRooted(path);
+                }
+                else
+                {
+                    string root = Path.GetPathRoot(path);
+                    isValid = string.IsNullOrEmpty(root.Trim(new char[] {'\\', '/'})) == false;
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"ERROR VALID PATH: {path} \t {exception}");
+                return false;
+            }
+
+            return true;
+        }
+
+        public void ReadJsonFile()
+        {
+            string jsonStr = File.ReadAllText(_path);
+            JsonNode = JSONNode.Parse(jsonStr);
+        }
+
+        public void WriteJsonFile(string jsonData)
+        {
+            Debug.Log("Сохранить файл");
+            File.WriteAllText(_path, jsonData);
+        }
     }
 }

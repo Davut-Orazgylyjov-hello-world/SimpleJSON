@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace AkademiaArt.JsonLocalization
+namespace OrazgylyjovFuteres.SimpleJSON
 {
     public static class JSONReader
     {
