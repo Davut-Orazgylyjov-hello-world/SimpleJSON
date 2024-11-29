@@ -52,7 +52,7 @@ namespace OrazgylyjovFuteres.SimpleJSON
             {
                 if (!resource.name.Contains(exceptionFile))
                 {
-                    filesName.Add(resource.name);
+                    filesName.Add(resource.name + ".json");
                 }
             }
 
